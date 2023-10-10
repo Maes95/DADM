@@ -10,13 +10,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import dev.maes.navigation.ui.components.CustomNavHost
 import dev.maes.navigation.ui.components.CustomTabRow
-import dev.maes.navigation.ui.pages.AndroidScreen
-import dev.maes.navigation.ui.pages.CoursesScreen
 import dev.maes.navigation.ui.theme.NavigationTheme
 
 class MainActivity : ComponentActivity() {
@@ -49,22 +46,10 @@ fun App() {
                 )
             }
         ) { innerPadding ->
-            NavHost(
+            CustomNavHost(
                 navController = navController,
-                startDestination = Android.route,
                 modifier = Modifier.padding(innerPadding)
-            ) {
-                composable(route = Android.route) {
-                    AndroidScreen(
-                        onSeeCoursesClick={
-                            navController.navigate(Courses.route){ launchSingleTop = true }
-                        }
-                    )
-                }
-                composable(route = Courses.route) {
-                    CoursesScreen()
-                }
-            }
+            )
         }
     }
 }
