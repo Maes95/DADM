@@ -15,6 +15,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import dev.maes.navigation.ui.components.CustomTabRow
+import dev.maes.navigation.ui.pages.AndroidScreen
+import dev.maes.navigation.ui.pages.CoursesScreen
 import dev.maes.navigation.ui.theme.NavigationTheme
 
 class MainActivity : ComponentActivity() {
@@ -53,10 +55,14 @@ fun App() {
                 modifier = Modifier.padding(innerPadding)
             ) {
                 composable(route = Android.route) {
-                    Android.screen()
+                    AndroidScreen(
+                        onSeeCoursesClick={
+                            navController.navigate(Courses.route){ launchSingleTop = true }
+                        }
+                    )
                 }
                 composable(route = Courses.route) {
-                    Courses.screen()
+                    CoursesScreen()
                 }
             }
         }
