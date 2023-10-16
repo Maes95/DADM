@@ -100,7 +100,9 @@ fun ItemDetailsScreen(
     ) { innerPadding ->
         ItemDetailsBody(
             itemDetailsUiState = uiState.value,
-            onSellItem = { },
+            onSellItem = {
+                viewModel.reduceQuantityByOne()
+            },
             onDelete = {
                 coroutineScope.launch {
                     viewModel.deleteItem()
