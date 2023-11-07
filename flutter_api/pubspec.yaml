@@ -10,6 +10,7 @@ dependencies:
   flutter:
     sdk: flutter
   http: ^1.1.0
+  google_fonts: ^6.1.0
 
 dev_dependencies:
   flutter_test:
@@ -17,4 +18,9 @@ dev_dependencies:
   flutter_lints: ^2.0.0
 
 flutter:
+  fonts:
+    - family: RickAndMorty
+      fonts:
+        - asset: fonts/get_schwifty.ttf
+          style: normal
   uses-material-design: true
