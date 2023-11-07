@@ -5,9 +5,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'Character.dart';
 
-Future<List<Character>> fetchCharacters() async {
+Future<List<Character>> fetchCharacters(int page) async {
   final response =
-  await http.get(Uri.parse('https://rickandmortyapi.com/api/character/'));
+  await http.get(Uri.parse('https://rickandmortyapi.com/api/character/?page=$page'));
   await Future.delayed(const Duration(seconds: 1));
   if (response.statusCode == 200) {
     Iterable l = json.decode(response.body)['results'];
@@ -29,11 +29,12 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
 
   late Future<List<Character>> charactersFuture;
+  int pageCount = 1;
 
   @override
   void initState() {
     super.initState();
-    charactersFuture = fetchCharacters();
+    charactersFuture = fetchCharacters(pageCount);
   }
 
   @override
@@ -48,23 +49,42 @@ class _MyAppState extends State<MyApp> {
           title: const Text('Rick and Morty Characters'),
         ),
         body: Center(
-          child: FutureBuilder<List<Character>>(
-            future: charactersFuture,
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                return ListView.builder(
-                  itemCount: snapshot.data!.length,
-                  itemBuilder: (context, index) {
-                    Character character = snapshot.data![index];
-                    return CharacterWidget(character: character);
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: SizedBox(
+                  width: 200,
+                  height: 50,
+                  child: ElevatedButton(onPressed: ()=>{
+                    setState(() {
+                      pageCount+=1;
+                      charactersFuture = fetchCharacters(pageCount);
+                    })
+                  }, child: const Text("Next page", style: TextStyle(fontSize: 30))),
+                ),
+              ),
+              Expanded(
+                child: FutureBuilder<List<Character>>(
+                  future: charactersFuture,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      return ListView.builder(
+                        itemCount: snapshot.data!.length,
+                        itemBuilder: (context, index) {
+                          Character character = snapshot.data![index];
+                          return CharacterWidget(character: character);
+                        },
+                      );
+                    } else if (snapshot.hasError) {
+                      return Text('${snapshot.error}');
+                    }
+                    // By default, show a loading spinner.
+                    return const CircularProgressIndicator();
                   },
-                );
-              } else if (snapshot.hasError) {
-                return Text('${snapshot.error}');
-              }
-              // By default, show a loading spinner.
-              return const CircularProgressIndicator();
-            },
+                ),
+              ),
+            ],
           ),
         ),
       ),
