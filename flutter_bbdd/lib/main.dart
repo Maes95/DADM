@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:prueba_bbdd/CharacterService.dart';
 
 import 'Character.dart';
 
@@ -14,17 +15,21 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  List<Character> characters = [
-    Character(name: "Rick Sánchez", image: "https://rickandmortyapi.com/api/character/avatar/1.jpeg"),
-    Character(name: "Morty Smith", image: "https://rickandmortyapi.com/api/character/avatar/2.jpeg"),
-    Character(name: "Summer Smith", image: "https://rickandmortyapi.com/api/character/avatar/3.jpeg"),
-  ];
+  List<Character> characters = [];
 
   @override
   void initState() {
     super.initState();
+    _getRefreshCharacters();
   }
 
+  void _getRefreshCharacters() async {
+    final data = await CharacterService.loadCharacters();
+    setState(() {
+      characters = data;
+    });
+  }
+  // No copiar
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -40,6 +45,7 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Column(
             children: [
               Expanded(
+                  // No copiar
                   child: ListView(
                 children: [
                   for (var character in characters)
