@@ -42,4 +42,13 @@ class CharacterService {
     });
   }
 
+  static Future<void> deleteCharacter(int id) async {
+    final connection = await db();
+
+    await connection.delete(
+      'Characters',
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+  }
 }

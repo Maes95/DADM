@@ -41,6 +41,11 @@ class _HomeScreenState extends State<HomeScreen> {
     _getRefreshCharacters();
   }
 
+  Future<void> removeItem(int id) async {
+    await CharacterService.deleteCharacter(id);
+    _getRefreshCharacters();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -70,6 +75,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   for (var character in characters)
                     CharacterWidget(
                       character: character,
+                      onDeleteCharacter: (id) {
+                        removeItem(id);
+                      },
                     )
                 ],
               )),
@@ -127,9 +135,10 @@ class CharacterForm extends StatelessWidget {
 
 class CharacterWidget extends StatelessWidget {
   const CharacterWidget(
-      {super.key, required this.character});
+      {super.key, required this.character, required this.onDeleteCharacter});
 
   final Character character;
+  final Function(int) onDeleteCharacter;
 
   @override
   Widget build(BuildContext context) {
@@ -145,13 +154,22 @@ class CharacterWidget extends StatelessWidget {
                 fit: BoxFit.fitWidth,
               ),
             ),
-            Center(
-              child: Padding(
-                padding: const EdgeInsets.all(25.0),
-                child: Text(
-                  character.name,
-                  style: const TextStyle(fontSize: 32, color: Colors.cyan),
-                ),
+            Padding(
+              padding: const EdgeInsets.all(25.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    character.name,
+                    style: const TextStyle(fontSize: 32, color: Colors.cyan),
+                  ),
+                  FloatingActionButton(
+                      onPressed: () {
+                        onDeleteCharacter(character.id!);
+                      },
+                      backgroundColor: Colors.red,
+                      child: const Icon(Icons.close)),
+                ],
               ),
             ),
           ],
