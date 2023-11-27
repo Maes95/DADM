@@ -9,7 +9,6 @@ button:
   label:
     clickMe: "Click here"
     language: "Change language"
-  toastMessage: "You clicked on button!"
 
 clicked:
   times-0: "You clicked {times} times!"

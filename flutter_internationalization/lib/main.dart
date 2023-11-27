@@ -56,37 +56,33 @@ class MyHomeState extends State<MyHomePage> {
   changeLang() async{
     final Locale? currentLang = FlutterI18n.currentLocale(context);
     final newLang = currentLang!.languageCode == 'en' ? const Locale('es') : const Locale('en');
-    await FlutterI18n.refresh(context, newLang);
+    setState(() {
+      FlutterI18n.refresh(context, newLang);
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text(FlutterI18n.translate(context, "title"))),
-      body: Builder(
-        builder: (BuildContext context) => StreamBuilder<bool>(
-          initialData: true,
-          stream: FlutterI18n.retrieveLoadedStream(context),
-          builder: (BuildContext context, _) => Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                I18nText("label.main", translationParams: {"user": "Michel"}),
-                I18nPlural("clicked.times", clicked),
-                TextButton(
-                    onPressed: () async {
-                      incrementCounter();
-                    },
-                    child: Text(FlutterI18n.translate(context, "button.label.clickMe"))),
-                TextButton(
-                    onPressed: () async {
-                      changeLang();
-                    },
-                    child: Text(FlutterI18n.translate(context, "button.label.language"))
-                ),
-              ],
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            I18nText("label.main", translationParams: {"user": "Michel"}),
+            I18nPlural("clicked.times", clicked),
+            TextButton(
+                onPressed: () async {
+                  incrementCounter();
+                },
+                child: I18nText("button.label.clickMe")),
+            TextButton(
+                onPressed: () async {
+                  changeLang();
+                },
+                child: I18nText("button.label.language")
             ),
-          ),
+          ],
         ),
       ),
     );
