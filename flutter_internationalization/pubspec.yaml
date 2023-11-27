@@ -10,6 +10,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_i18n: ^0.34.0
+  flag: 7.0.0
 
 dev_dependencies:
   flutter_test:

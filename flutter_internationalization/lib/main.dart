@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:flag/flag_enum.dart';
+import 'package:flag/flag_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -53,11 +55,9 @@ class MyHomeState extends State<MyHomePage> {
     });
   }
 
-  changeLang() async{
-    final Locale? currentLang = FlutterI18n.currentLocale(context);
-    final newLang = currentLang!.languageCode == 'en' ? const Locale('es') : const Locale('en');
+  changeLang(String lang) async{
     setState(() {
-      FlutterI18n.refresh(context, newLang);
+      FlutterI18n.refresh(context, Locale(lang));
     });
   }
 
@@ -76,15 +76,47 @@ class MyHomeState extends State<MyHomePage> {
                   incrementCounter();
                 },
                 child: I18nText("button.label.clickMe")),
-            TextButton(
-                onPressed: () async {
-                  changeLang();
-                },
-                child: I18nText("button.label.language")
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                FlagButton(countryCode: FlagsCode.GB_ENG, onClick: () async {
+                  changeLang("en");
+                }),
+                FlagButton(countryCode: FlagsCode.ES, onClick: () async {
+                  changeLang("es");
+                }),
+              ],
             ),
           ],
         ),
       ),
+    );
+  }
+}
+
+class FlagButton extends StatelessWidget {
+  const FlagButton({
+    super.key,
+    required this.countryCode,
+    required this.onClick
+  });
+
+  final FlagsCode countryCode;
+  final Function onClick;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(
+        onPressed: (){
+          onClick();
+        },
+        child: Flag.fromCode(
+          countryCode,
+          height: 50,
+          width: 50,
+          flagSize: FlagSize.size_1x1,
+          borderRadius: 25,
+        )
     );
   }
 }
