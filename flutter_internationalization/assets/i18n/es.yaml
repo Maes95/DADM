@@ -1,0 +1,17 @@
+title: "Aplicación de prueba"
+
+# With yaml, you can also comment your translations
+label:
+  main: "Hola {user}!"
+
+# Objects can be many levels deep
+button:
+  label:
+    clickMe: "Haga clic aquí"
+    language: "Cambiar idioma"
+  toastMessage: "Hiciste clic en el botón!"
+
+clicked:
+  times-0: "Hiciste clic {times} veces!"
+  times-1: "Hiciste clic {time} vez!"
+  times-2: "Hiciste clic {times} veces!"
